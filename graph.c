@@ -23,12 +23,12 @@ void graph_reset(Graph *graph) {
 
 void graph_connect(Graph *graph, int from, int to) {
 	List *list = graph->nodes[from].edges;
-	list_add(list, to);
+	set_add(list, to);
 }
 
 void graph_bfs(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node), int depth_limit) {
 	List *visited = list_create();
-	// list_add(visited, from);
+	// set_add(visited, from);
 	(*searchFunc)(graph, from);
 	graph_bfs_helper(graph, from, searchFunc, depth_limit, 0, visited);
 	list_destroy(visited);
@@ -37,7 +37,7 @@ void graph_bfs(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node
 void graph_bfs_helper(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node), int depth_limit, int depth, List *visited) {
 	if ((depth_limit >= 0 && depth > depth_limit) || list_contains(visited, from))
 		return;
-	list_add(visited, from);
+	set_add(visited, from);
 
 	//iterate over edges and apply function
 	List *edge = graph->nodes[from].edges;
@@ -83,7 +83,7 @@ List* list_create() {
 	return list;
 }
 
-int list_add(List *list, int value) {
+int list_add(List *list, int value, int disallow_duplicates) {
 	while (list != NULL) {
 		//list empty case
 		if (*(list->size) == 0) {
@@ -93,7 +93,7 @@ int list_add(List *list, int value) {
 		}
 
 		//value present case
-		if (list->value == value)
+		if (disallow_duplicates && list->value == value)
 			return 0;
 
 		//not at end case
@@ -111,6 +111,10 @@ int list_add(List *list, int value) {
 		return 1;
 	}
 	return 0;
+}
+
+int set_add(List *list, int value) {
+	return list_add(list, value, 1);
 }
 
 int list_contains(List *list, int value) {

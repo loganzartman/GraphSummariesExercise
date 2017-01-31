@@ -6,12 +6,6 @@ int main(int argc, char const *argv[]) {
 	int cases;
 	scanf("%d", &cases);
 
-	// List *test = list_create();
-	// list_add(test, 1);
-	// list_add(test, 3);
-	// list_add(test, 7);
-	// list_print(test);
-
 	//iterate over test cases
 	for (int c=0; c<cases; c++) {
 		//read test parameters
@@ -41,6 +35,8 @@ int main(int argc, char const *argv[]) {
 
 		//print results
 		printf("%d %d\n", cc, reachable);
+
+		graph_destroy(graph);
 	}
 
 	return 0;
@@ -77,5 +73,5 @@ int count_connected_components(Graph *graph) {
 }
 
 void count_connected_helper(Graph *graph, int node) {
-	list_add(found_nodes, node);
+	set_add(found_nodes, node);
 }
