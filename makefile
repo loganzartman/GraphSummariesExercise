@@ -1,4 +1,4 @@
-CC = gcc -O3
+CC = gcc -std=c99 -O3
 objects = summaries.o graph.o
 
 summaries: $(objects)
