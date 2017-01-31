@@ -23,6 +23,7 @@ void graph_reset(Graph *graph);
 void graph_connect(Graph *graph, int from, int to);
 void graph_bfs(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node), int depthLimit);
 void graph_bfs_helper(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node), int depth_limit, int depth, List *visited);
+void graph_destroy(Graph *graph);
 
 List* list_create();
 int list_add(List *list, int value);

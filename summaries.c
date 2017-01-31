@@ -66,8 +66,6 @@ int count_connected_components(Graph *graph) {
 
 	while (*(found_nodes->size) < num_nodes) {
 		for (int i=0; i<num_nodes; i++) {
-			// printf("List: ");
-			// list_print(found_nodes);
 			if (!list_contains(found_nodes, i)) {
 				graph_bfs(graph, i, searchFunc, -1);
 				components++;

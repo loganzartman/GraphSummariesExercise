@@ -58,6 +58,17 @@ void graph_bfs_helper(Graph *graph, int from, void (*searchFunc)(Graph *graph, i
 	}
 }
 
+void graph_destroy(Graph *graph) {
+	if (graph == NULL)
+		return;
+
+	for (int i=0; i<graph->num_nodes; i++) {
+		Node *node = &(graph->nodes[i]);
+		list_destroy(node->edges);
+	}
+	free(graph);
+}
+
 List* list_create() {
 	//allocate space for a new list
 	List *list;
