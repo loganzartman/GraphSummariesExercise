@@ -6,7 +6,7 @@ int main(int argc, char const *argv[]) {
 	int cases;
 	scanf("%d", &cases);
 
-	List *test = list_create(0);
+	List *test = list_create();
 	list_add(test, 1);
 	list_add(test, 3);
 	printf("TEST: %d %d\n", list_contains(test, 1), list_contains(test, 2));
@@ -49,6 +49,20 @@ void count_reachable(Graph *graph, int node) {
 	graph->scratch++;
 }
 
+List *found_nodes;
 int count_connected_components(Graph *graph) {
+	//reset found nodes
+	list_destroy(found_nodes);
+	found_nodes = list_create();
+
+	int num_nodes = graph->num_nodes;
+	while (*(found_nodes->size) < num_nodes) {
+		break;
+	}
+
 	return 0;
+}
+
+void count_connected_helper(Graph *graph, int node) {
+
 }
