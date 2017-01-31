@@ -17,35 +17,35 @@ int main(int argc, char const *argv[]) {
 		int nodes, edges, start, dist;
 		scanf("%d %d %d %d", &nodes, &edges, &start, &dist);
 
-		Graph graph;
-		graph_init(&graph, nodes);
+		Graph *graph = graph_create(nodes);
 
 		//parse edges
 		for (int e=0; e<edges; e++) {
 			int from, to;
 			scanf("%d %d", &from, &to);
 
-			graph_connect(&graph, from, to);
+			graph_connect(graph, from, to);
 		}
 
 		//count connected components
-		int cc = count_connected_components(&graph);
+		graph_reset(graph);
+		int cc = count_connected_components(graph);
 
 		//do a breadth-first search of limited depth that just counts nodes
+		graph_reset(graph);
 		void (*searchFunc)(Graph *graph, int node);
-		searchFunc = &count_reachable;
-		graph_bfs(&graph, start, searchFunc, dist);
-		int reachable = graph.scratch;
+		searchFunc = &count_reachable_helper;
+		graph_bfs(graph, start, searchFunc, dist);
+		int reachable = graph->scratch;
 
 		//print results
-		printf("Testing lol\n");
+		printf("%d %d\n", cc, reachable);
 	}
 
 	return 0;
 }
 
-void count_reachable(Graph *graph, int node) {
-	//this is dumb but it could totally do something cooler
+void count_reachable_helper(Graph *graph, int node) {
 	graph->scratch++;
 }
 
@@ -55,14 +55,26 @@ int count_connected_components(Graph *graph) {
 	list_destroy(found_nodes);
 	found_nodes = list_create();
 
+	//prep
 	int num_nodes = graph->num_nodes;
+	int components = 0;
+
+	//a function pointer to use for BFS
+	void (*searchFunc)(Graph *graph, int node);
+	searchFunc = &count_connected_helper;
+
 	while (*(found_nodes->size) < num_nodes) {
-		break;
+		for (int i=0; i<num_nodes; i++) {
+			if (!list_contains(found_nodes, i)) {
+				graph_bfs(graph, i, searchFunc, -1);
+				components++;
+			}
+		}
 	}
 
-	return 0;
+	return components;
 }
 
 void count_connected_helper(Graph *graph, int node) {
-
+	list_add(found_nodes, node);
 }

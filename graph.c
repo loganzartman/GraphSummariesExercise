@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include "graph.h"
 
-void graph_init(Graph *graph, int num_nodes) {
+Graph* graph_create(int num_nodes) {
+	Graph *graph = malloc(sizeof(Graph));
 	graph->num_nodes = num_nodes;
 
 	//initialize nodes
@@ -13,6 +14,7 @@ void graph_init(Graph *graph, int num_nodes) {
 	}
 
 	graph_reset(graph);
+	return graph;
 }
 
 void graph_reset(Graph *graph) {
@@ -24,8 +26,34 @@ void graph_connect(Graph *graph, int from, int to) {
 	list_add(list, to);
 }
 
-void graph_bfs(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node), int depthLimit) {
+void graph_bfs(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node), int depth_limit) {
+	List *visited = list_create();
+	(*searchFunc)(graph, from);
+	graph_bfs_helper(graph, from, searchFunc, depth_limit, 0, visited);
+	list_destroy(visited);
+}
 
+void graph_bfs_helper(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node), int depth_limit, int depth, List *visited) {
+	if (depth >= depth_limit || list_contains(visited, from))
+		return;
+
+	//iterate over edges and apply function
+	List *edge = graph->nodes[from].edges;
+	while (edge != NULL) {
+		if (*(edge->size) == 0)
+			return;
+		(*searchFunc)(graph, edge->value);
+		edge = edge->next;
+	}
+
+	//visit edges
+	edge = graph->nodes[from].edges;
+	while (edge != NULL) {
+		if (*(edge->size) == 0)
+			return;
+		graph_bfs_helper(graph, edge->value, searchFunc, depth_limit, depth+1, visited);
+		edge = edge->next;
+	}
 }
 
 List* list_create() {
