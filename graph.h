@@ -28,5 +28,6 @@ List* list_create();
 int list_add(List *list, int value);
 int list_contains(List *list, int value);
 void list_destroy(List *list);
+void list_print(List *list);
 
 #endif

@@ -6,10 +6,11 @@ int main(int argc, char const *argv[]) {
 	int cases;
 	scanf("%d", &cases);
 
-	List *test = list_create();
-	list_add(test, 1);
-	list_add(test, 3);
-	printf("TEST: %d %d\n", list_contains(test, 1), list_contains(test, 2));
+	// List *test = list_create();
+	// list_add(test, 1);
+	// list_add(test, 3);
+	// list_add(test, 7);
+	// list_print(test);
 
 	//iterate over test cases
 	for (int c=0; c<cases; c++) {
@@ -24,7 +25,7 @@ int main(int argc, char const *argv[]) {
 			int from, to;
 			scanf("%d %d", &from, &to);
 
-			graph_connect(graph, from, to);
+			graph_connect(graph, from-1, to-1);
 		}
 
 		//count connected components
@@ -35,7 +36,7 @@ int main(int argc, char const *argv[]) {
 		graph_reset(graph);
 		void (*searchFunc)(Graph *graph, int node);
 		searchFunc = &count_reachable_helper;
-		graph_bfs(graph, start, searchFunc, dist);
+		graph_bfs(graph, start-1, searchFunc, dist);
 		int reachable = graph->scratch;
 
 		//print results
@@ -65,6 +66,8 @@ int count_connected_components(Graph *graph) {
 
 	while (*(found_nodes->size) < num_nodes) {
 		for (int i=0; i<num_nodes; i++) {
+			// printf("List: ");
+			// list_print(found_nodes);
 			if (!list_contains(found_nodes, i)) {
 				graph_bfs(graph, i, searchFunc, -1);
 				components++;
