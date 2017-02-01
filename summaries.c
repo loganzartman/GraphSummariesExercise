@@ -20,6 +20,7 @@ int main(int argc, char const *argv[]) {
 			scanf("%d %d", &from, &to);
 
 			graph_connect(graph, from-1, to-1);
+			graph_connect(graph, to-1, from-1);
 		}
 
 		//count connected components

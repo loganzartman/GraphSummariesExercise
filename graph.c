@@ -30,7 +30,7 @@ void graph_bfs(Graph *graph, int from, void (*searchFunc)(Graph *graph, int node
 	List *visited = list_create();
 	// set_add(visited, from);
 	(*searchFunc)(graph, from);
-	graph_bfs_helper(graph, from, searchFunc, depth_limit, 0, visited);
+	graph_bfs_helper(graph, from, searchFunc, depth_limit, 1, visited);
 	list_destroy(visited);
 }
 
@@ -44,7 +44,8 @@ void graph_bfs_helper(Graph *graph, int from, void (*searchFunc)(Graph *graph, i
 	while (edge != NULL) {
 		if (*(edge->size) == 0)
 			break;
-		(*searchFunc)(graph, edge->value);
+		if (!list_contains(visited, edge->value))
+			(*searchFunc)(graph, edge->value);
 		edge = edge->next;
 	}
 
